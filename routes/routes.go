@@ -39,37 +39,65 @@ func SetupRouter() *gin.Engine {
 		authController := controllers.NewAuthController()
 		qualityController := controllers.NewQualityController()
 		labdipController := controllers.NewLabdipController()
+		partyController := controllers.NewPartyController()
+		orderController := controllers.NewOrderController()
 
-		// Public Auth Routes
+		// Authentication & Verification Routes (Public)
 		authGroup := api.Group("/auth")
 		{
 			authGroup.POST("/login", authController.Login)
 
 			// Protected Auth Routes
-			protected := authGroup.Group("")
-			protected.Use(middleware.AuthMiddleware())
+			protectedAuth := authGroup.Group("")
+			protectedAuth.Use(middleware.AuthMiddleware())
 			{
-				protected.GET("/me", authController.GetMe)
+				protectedAuth.GET("/me", authController.GetMe)
 			}
 		}
 
 		// Protected Application Routes
-		appGroup := api.Group("")
-		appGroup.Use(middleware.AuthMiddleware())
+		protected := api.Group("")
+		protected.Use(middleware.AuthMiddleware())
 		{
-			// Qualities CRUD
-			appGroup.GET("/qualities", qualityController.GetQualities)
-			appGroup.GET("/qualities/:id", qualityController.GetQualityByID)
-			appGroup.POST("/qualities", qualityController.CreateQuality)
-			appGroup.PUT("/qualities/:id", qualityController.UpdateQuality)
-			appGroup.DELETE("/qualities/:id", qualityController.DeleteQuality)
+			// Qualities Management (Protected)
+			qualities := protected.Group("/qualities")
+			{
+				qualities.GET("", qualityController.GetQualities)
+				qualities.GET("/:id", qualityController.GetQualityByID)
+				qualities.POST("", qualityController.CreateQuality)
+				qualities.PUT("/:id", qualityController.UpdateQuality)
+				qualities.DELETE("/:id", qualityController.DeleteQuality)
+			}
 
-			// Labdips CRUD
-			appGroup.GET("/labdips", labdipController.GetLabdips)
-			appGroup.GET("/labdips/:id", labdipController.GetLabdipByID)
-			appGroup.POST("/labdips", labdipController.CreateLabdip)
-			appGroup.PUT("/labdips/:id", labdipController.UpdateLabdip)
-			appGroup.DELETE("/labdips/:id", labdipController.DeleteLabdip)
+			// Labdips Management (Protected)
+			labdips := protected.Group("/labdips")
+			{
+				labdips.GET("", labdipController.GetLabdips)
+				labdips.GET("/:id", labdipController.GetLabdipByID)
+				labdips.POST("", labdipController.CreateLabdip)
+				labdips.PUT("/:id", labdipController.UpdateLabdip)
+				labdips.DELETE("/:id", labdipController.DeleteLabdip)
+			}
+
+			// Parties Management (Protected)
+			parties := protected.Group("/parties")
+			{
+				parties.GET("", partyController.GetParties)
+				parties.GET("/:id", partyController.GetPartyByID)
+				parties.POST("", partyController.CreateParty)
+				parties.PUT("/:id", partyController.UpdateParty)
+				parties.DELETE("/:id", partyController.DeleteParty)
+			}
+
+			// Orders Management (Protected)
+			orders := protected.Group("/orders")
+			{
+				orders.GET("", orderController.GetOrders)
+				orders.GET("/:id", orderController.GetOrderByID)
+				orders.POST("", orderController.CreateOrder)
+				orders.PUT("/:id", orderController.UpdateOrder)
+				orders.DELETE("/:id", orderController.DeleteOrder)
+			}
 		}
 	}
 
