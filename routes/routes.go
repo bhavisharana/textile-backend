@@ -65,8 +65,8 @@ func SetupRouter() *gin.Engine {
 				qualities.GET("", qualityController.GetQualities)
 				qualities.GET("/:id", qualityController.GetQualityByID)
 				qualities.POST("", qualityController.CreateQuality)
-				qualities.PUT("/:id", qualityController.UpdateQuality)
-				qualities.DELETE("/:id", qualityController.DeleteQuality)
+				qualities.POST("/:id/update", qualityController.UpdateQuality)
+				qualities.POST("/:id/delete", qualityController.DeleteQuality)
 			}
 
 			// Labdips Management (Protected)
@@ -75,8 +75,8 @@ func SetupRouter() *gin.Engine {
 				labdips.GET("", labdipController.GetLabdips)
 				labdips.GET("/:id", labdipController.GetLabdipByID)
 				labdips.POST("", labdipController.CreateLabdip)
-				labdips.PUT("/:id", labdipController.UpdateLabdip)
-				labdips.DELETE("/:id", labdipController.DeleteLabdip)
+				labdips.POST("/:id/update", labdipController.UpdateLabdip)
+				labdips.POST("/:id/delete", labdipController.DeleteLabdip)
 			}
 
 			// Parties Management (Protected)
@@ -85,8 +85,8 @@ func SetupRouter() *gin.Engine {
 				parties.GET("", partyController.GetParties)
 				parties.GET("/:id", partyController.GetPartyByID)
 				parties.POST("", partyController.CreateParty)
-				parties.PUT("/:id", partyController.UpdateParty)
-				parties.DELETE("/:id", partyController.DeleteParty)
+				parties.POST("/:id/update", partyController.UpdateParty)
+				parties.POST("/:id/delete", partyController.DeleteParty)
 			}
 
 			// Orders Management (Protected)
@@ -95,8 +95,8 @@ func SetupRouter() *gin.Engine {
 				orders.GET("", orderController.GetOrders)
 				orders.GET("/:id", orderController.GetOrderByID)
 				orders.POST("", orderController.CreateOrder)
-				orders.PUT("/:id", orderController.UpdateOrder)
-				orders.DELETE("/:id", orderController.DeleteOrder)
+				orders.POST("/:id/update", orderController.UpdateOrder)
+				orders.POST("/:id/delete", orderController.DeleteOrder)
 			}
 		}
 	}
