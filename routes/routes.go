@@ -41,6 +41,7 @@ func SetupRouter() *gin.Engine {
 		labdipController := controllers.NewLabdipController()
 		partyController := controllers.NewPartyController()
 		orderController := controllers.NewOrderController()
+		dashboardController := controllers.NewDashboardController()
 
 		// Authentication & Verification Routes (Public)
 		authGroup := api.Group("/auth")
@@ -59,6 +60,9 @@ func SetupRouter() *gin.Engine {
 		protected := api.Group("")
 		protected.Use(middleware.AuthMiddleware())
 		{
+			// Dashboard Statistics (Protected)
+			protected.GET("/dashboard/stats", dashboardController.GetDashboardStats)
+
 			// Qualities Management (Protected)
 			qualities := protected.Group("/qualities")
 			{
@@ -96,6 +100,7 @@ func SetupRouter() *gin.Engine {
 				orders.GET("/:id", orderController.GetOrderByID)
 				orders.POST("", orderController.CreateOrder)
 				orders.POST("/:id/update", orderController.UpdateOrder)
+				orders.POST("/:id/status", orderController.UpdateOrderStatus)
 				orders.POST("/:id/delete", orderController.DeleteOrder)
 			}
 		}

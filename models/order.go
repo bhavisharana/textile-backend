@@ -12,6 +12,7 @@ type Order struct {
 	Quantity    float64   `gorm:"not null" json:"quantity"`
 	Rate        float64   `gorm:"not null" json:"rate"`
 	TotalAmount float64   `gorm:"not null" json:"total_amount"`
+	Status      string    `gorm:"not null;default:'Pending'" json:"status"`
 	Remarks     string    `json:"remarks"`
 	CreatedAt   time.Time `json:"created_at"`
 	UpdatedAt   time.Time `json:"updated_at"`
