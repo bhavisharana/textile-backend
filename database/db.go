@@ -5,8 +5,6 @@ import (
 	"log"
 	"os"
 
-	"backend/models"
-
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -45,12 +43,6 @@ func InitDB() *gorm.DB {
 	}
 
 	log.Println("Database connection established successfully")
-
-	// Auto-migrate schema
-	err = DB.AutoMigrate(&models.User{}, &models.Quality{}, &models.Labdip{}, &models.Party{}, &models.Order{})
-	if err != nil {
-		log.Fatalf("Failed to migrate database: %v", err)
-	}
 
 	return DB
 }

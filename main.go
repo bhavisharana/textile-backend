@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"os"
 
 	"backend/database"
 	"backend/database/seeders"
@@ -12,7 +13,13 @@ func main() {
 	// Initialize Database
 	database.InitDB()
 
-	// Run Seeders
+	// Check for CLI arguments (e.g. "go run main.go migrate")
+	if len(os.Args) > 1 && os.Args[1] == "migrate" {
+		database.RunMigrations()
+		return
+	}
+
+	// Run Seeders (Optional: you might want to run seeders via a command too)
 	seeders.SeedUser()
 
 	// Setup Router & Start Server
