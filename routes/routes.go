@@ -42,6 +42,9 @@ func SetupRouter() *gin.Engine {
 		partyController := controllers.NewPartyController()
 		orderController := controllers.NewOrderController()
 		dashboardController := controllers.NewDashboardController()
+		userController := controllers.NewUserController()
+		roleController := controllers.NewRoleController()
+		permissionController := controllers.NewPermissionController()
 
 		// Authentication & Verification Routes (Public)
 		authGroup := api.Group("/auth")
@@ -62,6 +65,32 @@ func SetupRouter() *gin.Engine {
 		{
 			// Dashboard Statistics (Protected)
 			protected.GET("/dashboard/stats", dashboardController.GetDashboardStats)
+
+			// Users Management (Protected)
+			users := protected.Group("/users")
+			{
+				users.GET("", userController.GetUsers)
+				users.GET("/:id", userController.GetUserByID)
+				users.POST("", userController.CreateUser)
+				users.POST("/:id/update", userController.UpdateUser)
+				users.POST("/:id/delete", userController.DeleteUser)
+			}
+
+			// Roles Management (Protected)
+			roles := protected.Group("/roles")
+			{
+				roles.GET("", roleController.GetRoles)
+				roles.GET("/:id", roleController.GetRoleByID)
+				roles.POST("", roleController.CreateRole)
+				roles.POST("/:id/update", roleController.UpdateRole)
+				roles.POST("/:id/delete", roleController.DeleteRole)
+			}
+
+			// Permissions Management (Protected)
+			permissions := protected.Group("/permissions")
+			{
+				permissions.GET("", permissionController.GetPermissions)
+			}
 
 			// Qualities Management (Protected)
 			qualities := protected.Group("/qualities")

@@ -49,6 +49,13 @@ func (ac *AuthController) Login(c *gin.Context) {
 		return
 	}
 
+	if user.RoleID != nil {
+		var role models.Role
+		if err := database.DB.Preload("Permissions").First(&role, *user.RoleID).Error; err == nil {
+			user.Role = &role
+		}
+	}
+
 	token, err := utils.GenerateToken(user.ID, user.Username)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
@@ -65,7 +72,9 @@ func (ac *AuthController) Login(c *gin.Context) {
 			"token": token,
 			"user": gin.H{
 				"id":       user.ID,
+				"name":     user.Name,
 				"username": user.Username,
+				"role":     user.Role,
 			},
 		},
 	})
@@ -90,11 +99,20 @@ func (ac *AuthController) GetMe(c *gin.Context) {
 		return
 	}
 
+	if user.RoleID != nil {
+		var role models.Role
+		if err := database.DB.Preload("Permissions").First(&role, *user.RoleID).Error; err == nil {
+			user.Role = &role
+		}
+	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"success": true,
 		"data": gin.H{
 			"id":       user.ID,
+			"name":     user.Name,
 			"username": user.Username,
+			"role":     user.Role,
 		},
 	})
 }

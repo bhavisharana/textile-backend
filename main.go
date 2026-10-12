@@ -13,9 +13,13 @@ func main() {
 	// Initialize Database
 	database.InitDB()
 
-	// Check for CLI arguments (e.g. "go run main.go migrate")
+	// Check for CLI arguments (e.g. "go run main.go migrate" or "go run main.go migrate roles")
 	if len(os.Args) > 1 && os.Args[1] == "migrate" {
-		database.RunMigrations()
+		if len(os.Args) > 2 {
+			database.RunSpecificMigration(os.Args[2])
+		} else {
+			database.RunMigrations()
+		}
 		return
 	}
 
